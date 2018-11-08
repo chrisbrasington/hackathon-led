@@ -5,11 +5,22 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using LEDTestAPI.Services;
 
 namespace LEDTestAPI.Controllers
 {
    public class ValuesController : ApiController
    {
+      private readonly SerialService _serialService;
+
+      /// <summary>
+      /// Initializes an instance of class <see cref="ValuesController"/>
+      /// </summary>
+      public ValuesController(SerialService serialService)
+      {
+         _serialService = serialService;
+      }
+
       // GET api/values
       public IEnumerable<string> Get()
       {
@@ -30,22 +41,15 @@ namespace LEDTestAPI.Controllers
             return;
          }
 
-         SerialPort arduino = new SerialPort();
-         arduino.BaudRate = 115200;
-         arduino.PortName = "COM7";
-         arduino.Open();
-
          try
          {
-            if (arduino.IsOpen)
+            if (_serialService.IsOpen)
             {
-               arduino.Write(value);
+               _serialService.SendText(value);
             }
          }
          catch
          { }
-
-         arduino.Close();
       }
 
       // PUT api/values/5
