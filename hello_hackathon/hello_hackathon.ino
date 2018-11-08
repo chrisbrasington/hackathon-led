@@ -20,6 +20,8 @@ void setup() {
 
   Serial.begin(115200);
   Serial.println("DONE");
+
+  
   
 }
 
@@ -43,14 +45,18 @@ void loop() {
     // read the incoming byte:
     incomingByte = Serial.read();
 
-    // say what you got:
-    Serial.print("I received: ");
-    char c = incomingByte;
-    Serial.println(c);
+    if(32 <= incomingByte && incomingByte <= 126) {
+  
 
-    str[i] = c;
+      // say what you got:
+      Serial.print("I received: ");
+      char c = incomingByte;
+      Serial.println(c);
 
-    i = i+1;
+      str[i] = c;
+  
+      i = i+1;
+    }
     
   }
   else {
