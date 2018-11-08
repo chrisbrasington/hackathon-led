@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,7 +25,27 @@ namespace LEDTestAPI.Controllers
       // POST api/values
       public void Post([FromUri]string value)
       {
+         if (value == null)
+         {
+            return;
+         }
 
+         SerialPort arduino = new SerialPort();
+         arduino.BaudRate = 115200;
+         arduino.PortName = "COM7";
+         arduino.Open();
+
+         try
+         {
+            if (arduino.IsOpen)
+            {
+               arduino.Write(value);
+            }
+         }
+         catch
+         { }
+
+         arduino.Close();
       }
 
       // PUT api/values/5

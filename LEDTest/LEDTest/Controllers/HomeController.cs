@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -35,12 +36,20 @@ namespace LEDTest.Controllers
       }
 
 
-      private async void SentText(string text)
+      private void SentText(string text)
       {
-         using (HttpClient client = new HttpClient())
+         SerialPort arduino = new SerialPort();
+         arduino.BaudRate = 115200;
+         arduino.PortName = "COM7";
+         arduino.Open();
+
+
+         if (arduino.IsOpen)
          {
-            await client.PostAsync("Chris' computer", new StringContent(text));
+            arduino.Write(text);
          }
+
+         arduino.Close();
       }
    }
 }
