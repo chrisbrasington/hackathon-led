@@ -79,17 +79,17 @@ namespace Wunderground
       public string relative_humidity { get; set; }
       public string wind_string { get; set; }
       public string wind_dir { get; set; }
-      public int wind_degrees { get; set; }
-      public int wind_mph { get; set; }
+      public double wind_degrees { get; set; }
+      public double wind_mph { get; set; }
       public string wind_gust_mph { get; set; }
-      public int wind_kph { get; set; }
+      public double wind_kph { get; set; }
       public string wind_gust_kph { get; set; }
       public string pressure_mb { get; set; }
       public string pressure_in { get; set; }
       public string pressure_trend { get; set; }
       public string dewpoint_string { get; set; }
-      public int dewpoint_f { get; set; }
-      public int dewpoint_c { get; set; }
+      public double dewpoint_f { get; set; }
+      public double dewpoint_c { get; set; }
       public string heat_index_string { get; set; }
       public string heat_index_f { get; set; }
       public string heat_index_c { get; set; }
