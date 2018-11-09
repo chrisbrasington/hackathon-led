@@ -71,7 +71,7 @@ namespace LEDTestAPI.Controllers
          {
             if (_serialService.IsOpen)
             {
-               _serialService.SendText(value);
+               _serialService.SendText("1"+value);
             }
          }
          catch
