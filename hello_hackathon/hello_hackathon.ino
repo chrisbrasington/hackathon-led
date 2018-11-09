@@ -16,12 +16,10 @@ int16_t    textX         = matrix.width(),
 int incomingByte = 0; 
 int i = 0;
 char str[] = "                                        ";
-//char str[] = "abcdefghijklmnopqrstuvwxyz";
-
 
 void setup() {
   matrix.begin();
-  //matrix.setTextWrap(false); // Allow text to run off right edge
+  matrix.setTextWrap(false); // Allow text to run off right edge
   matrix.setTextSize(2);
 
   Serial.begin(115200);
@@ -36,44 +34,7 @@ void setup() {
   
 }
 
-/*
-void scrollTest() {
-  str[0] = '1';
-  str[1] = 'a';
-  str[2] = 'b';
-  str[3] = 'c';
-  str[4] = 'd';
-  str[5] = 'e';
-  str[6] = 'f';
-  str[7] = 'g';
-  str[8] = 'h';
-  str[9] = 'i';
-  str[10] = 'j';
-  str[11] = 'k';
-  str[12] = 'l';
-  str[13] = 'm';
-  str[14] = 'n';
-  str[15] = 'o';
-  str[16] = 'p';
-  str[17] = 'q';
-  str[18] = 'r';
-  str[19] = 's';
-  str[20] = 't';
-  str[21] = 'u';
-  str[22] = 'v';
-  str[23] = 'w';
-  str[24] = 'y';
-  str[25] = 'z';
-
-  printScroll(str,26*-12);
-  resetBuffer();
-  
-}
-*/
-
-
 void resetBuffer() {
-  //int upper = 26; 
   int upper = 40;
   
    for(int x = 0; x < upper; x++ ) {
@@ -82,10 +43,6 @@ void resetBuffer() {
 }
 
 void loop() {
-  
-  //print(str, sizeof(str) * -12);
-  //delay(10);
-
   // send data only when you receive data:
   if (Serial.available() > 0) {
 
@@ -118,14 +75,7 @@ void loop() {
         delay(5000);
         resetBuffer();
       }
-      //else if (str[0] == '1') {
-        //printScroll(str, i*-12);
-     
-      //}
       delay(100);
-      
-      
-      //resetBuffer();
     }
     i = 0;
   }
@@ -137,14 +87,12 @@ void loop() {
 
 
 void print(char str[], int size) {
-  //textMin       = size;
+  
   byte i;
 
   matrix.setCursor(2, 0);  // start at top left, with one pixel of spacing
   matrix.setTextSize(1);   // size 1 == 8 pixels high
 
-  // print each letter with a rainbow color
-  //matrix.print("12345");
   matrix.setTextColor(matrix.Color333(7,0,0));
   for(int x = 1; x <=6; x++){
     matrix.print(str[x]);
@@ -162,7 +110,7 @@ void print(char str[], int size) {
 
 void printScroll(char str[], int size) {
   
-  //textMin       = size;
+
   matrix.setTextSize(2);   
 
   byte i;

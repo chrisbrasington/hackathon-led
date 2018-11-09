@@ -67,7 +67,6 @@ namespace LEDTestAPI.Controllers
             return;
          }
 
-
          try
          {
             if (_serialService.IsOpen)
