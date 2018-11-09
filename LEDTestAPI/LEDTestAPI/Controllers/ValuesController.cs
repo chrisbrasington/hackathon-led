@@ -45,12 +45,36 @@ namespace LEDTestAPI.Controllers
             return;
          }
 
-
          try
          {
             if (_serialService.IsOpen)
             {
-               _serialService.SendText("0"+ value);
+               List<string> words = new List<string>();
+
+               int i = 0;
+
+               foreach (string s in value.Split(' '))
+               {
+                  if (i % 2 == 0)
+                  {
+                     words.Add(s);
+                  }
+                  else
+                  {
+                     words[words.Count-1] += " " + s;
+                  }
+                  i++;
+               }
+
+               foreach (string s in words)
+               {
+                  _serialService.SendText("0" + s);
+                  System.Threading.Thread.Sleep(2000);
+               }
+
+               System.Threading.Thread.Sleep(4000);
+
+               _serialService.SendText("0");
             }
          }
          catch

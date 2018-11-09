@@ -119,7 +119,7 @@ void printScroll(char str[], int size) {
   // Move text left (w/wrap), increase hue
   if((--textX) < textMin) textX = matrix.width();
   hue += 7;
-  if(hue >= 1536) hue -= 1536;
+  //if(hue >= 1536) hue -= 1536;
   if(hue >= 1536) hue -= 1400;
 
   delay(10);
