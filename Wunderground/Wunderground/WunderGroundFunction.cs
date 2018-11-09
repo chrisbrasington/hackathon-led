@@ -10,7 +10,7 @@ namespace Wunderground
    public static class WunderGroundFunction
    {
       [FunctionName("Function1")]
-      public static async void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, TraceWriter log)
+      public static async void Run([TimerTrigger("0 * * * * *")]TimerInfo myTimer, TraceWriter log)
       {
          log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
          string apiKey = ConfigurationManager.AppSettings["WundergroundKey"];
@@ -18,14 +18,14 @@ namespace Wunderground
          using (var client = new HttpClient())
          {
             client.BaseAddress = new Uri($"http://api.wunderground.com/api/{apiKey}/conditions/q/80111.json");
+            log.Info(client.BaseAddress.ToString());
             var result = await client.GetAsync("");
             string resultContent = await result.Content.ReadAsStringAsync();
             RootObject a = JsonConvert.DeserializeObject<RootObject>(resultContent);
-            string text = $"{a.current_observation.temperature_string} {a.current_observation.weather}";
+            string text = $" {Math.Round(a.current_observation.temp_f)}f {a.current_observation.weather}";
             log.Info(text);
-            await client.PostAsync($"{apiUrl}={text}",null);
+            await client.PostAsync($"{apiUrl}={text}", null);
          }
-
       }
    }
 }
