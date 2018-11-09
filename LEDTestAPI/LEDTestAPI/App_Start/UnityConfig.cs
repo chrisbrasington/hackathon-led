@@ -13,7 +13,7 @@ namespace LEDTestAPI
       {
          var container = new UnityContainer();
 
-         container.RegisterType<SerialService>(new PerResolveLifetimeManager(),
+         container.RegisterType<SerialService>(new ContainerControlledLifetimeManager(),
             new InjectionFactory(c => new SerialService()));
 
          GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

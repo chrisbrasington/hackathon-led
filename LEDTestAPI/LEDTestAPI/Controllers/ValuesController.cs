@@ -9,6 +9,8 @@ using LEDTestAPI.Services;
 
 namespace LEDTestAPI.Controllers
 {
+
+   [RoutePrefix("api")]
    public class ValuesController : ApiController
    {
       private readonly SerialService _serialService;
@@ -34,7 +36,31 @@ namespace LEDTestAPI.Controllers
       }
 
       // POST api/values
+      [HttpPost]
+      [Route("message")]
       public void Post([FromUri]string value)
+      {
+         if (value == null)
+         {
+            return;
+         }
+
+
+         try
+         {
+            if (_serialService.IsOpen)
+            {
+               _serialService.SendText("0"+ value);
+            }
+         }
+         catch
+         { }
+      }
+
+      // POST api/values
+      [HttpPost]
+      [Route("scrolling")]
+      public void PostScrolling([FromUri]string value)
       {
          if (value == null)
          {
@@ -45,7 +71,7 @@ namespace LEDTestAPI.Controllers
          {
             if (_serialService.IsOpen)
             {
-               _serialService.SendText(value);
+               _serialService.SendText("1"+value);
             }
          }
          catch
