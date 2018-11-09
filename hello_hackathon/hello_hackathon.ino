@@ -7,30 +7,76 @@
 #define B   A1
 #define C   A2
 
-RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
+RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, true);
 
 int16_t    textX         = matrix.width(),
            textMin       = 60 * -12,
            hue           = 0;
 
-void setup() {
-  matrix.begin();
-  matrix.setTextWrap(false); // Allow text to run off right edge
-  matrix.setTextSize(2);
-
-  Serial.begin(115200);
-  Serial.println("DONE");
-
-  
-  
-}
-
 int incomingByte = 0; 
 int i = 0;
 char str[] = "                                        ";
+//char str[] = "abcdefghijklmnopqrstuvwxyz";
+
+
+void setup() {
+  matrix.begin();
+  //matrix.setTextWrap(false); // Allow text to run off right edge
+  matrix.setTextSize(2);
+
+  Serial.begin(115200);
+
+  str[0] = '0';
+  str[1] = 'O';
+  str[2] = 'N';
+  
+  print(str,10);
+  delay(1000);
+  resetBuffer();
+  
+}
+
+/*
+void scrollTest() {
+  str[0] = '1';
+  str[1] = 'a';
+  str[2] = 'b';
+  str[3] = 'c';
+  str[4] = 'd';
+  str[5] = 'e';
+  str[6] = 'f';
+  str[7] = 'g';
+  str[8] = 'h';
+  str[9] = 'i';
+  str[10] = 'j';
+  str[11] = 'k';
+  str[12] = 'l';
+  str[13] = 'm';
+  str[14] = 'n';
+  str[15] = 'o';
+  str[16] = 'p';
+  str[17] = 'q';
+  str[18] = 'r';
+  str[19] = 's';
+  str[20] = 't';
+  str[21] = 'u';
+  str[22] = 'v';
+  str[23] = 'w';
+  str[24] = 'y';
+  str[25] = 'z';
+
+  printScroll(str,26*-12);
+  resetBuffer();
+  
+}
+*/
+
 
 void resetBuffer() {
-   for(int x = 0; x < 40; x++ ) {
+  //int upper = 26; 
+  int upper = 40;
+  
+   for(int x = 0; x < upper; x++ ) {
       str[x] = ' ';
    }
 }
@@ -42,16 +88,18 @@ void loop() {
 
   // send data only when you receive data:
   if (Serial.available() > 0) {
+
+    if(i == 0) {
+      resetBuffer();
+    }
+    
     // read the incoming byte:
     incomingByte = Serial.read();
 
     if(32 <= incomingByte && incomingByte <= 126) {
   
-
-      // say what you got:
-      Serial.print("I received: ");
       char c = incomingByte;
-      Serial.println(c);
+
 
       str[i] = c;
   
@@ -64,27 +112,33 @@ void loop() {
       // fill the screen with black
       matrix.fillScreen(matrix.Color333(0, 0, 0));
       
-      Serial.print("RESULT: ");
-      Serial.println(str);
-      Serial.println(i);
-      
-      print(str, i * -12);
+
+      if(str[0] == '0') {
+        print(str, i * -12);  
+        delay(5000);
+        resetBuffer();
+      }
+      //else if (str[0] == '1') {
+        //printScroll(str, i*-12);
+     
+      //}
       delay(100);
       
-      resetBuffer();
+      
+      //resetBuffer();
     }
     i = 0;
   }
+  
+  delay(1);
+  printScroll(str, i*-12);
 }
 
 
 
 void print(char str[], int size) {
-  textMin       = size;
+  //textMin       = size;
   byte i;
-
-  Serial.println("PRINT!!!!");
-  Serial.println(str);
 
   matrix.setCursor(2, 0);  // start at top left, with one pixel of spacing
   matrix.setTextSize(1);   // size 1 == 8 pixels high
@@ -92,13 +146,42 @@ void print(char str[], int size) {
   // print each letter with a rainbow color
   //matrix.print("12345");
   matrix.setTextColor(matrix.Color333(7,0,0));
-  for(int x = 0; x <=5; x++){
+  for(int x = 1; x <=6; x++){
     matrix.print(str[x]);
   }
 
   matrix.setCursor(2, 9);  // next line
   matrix.setTextColor(matrix.Color333(0,7,7));
-  for(int x = 5; x <= 10; x++){
+  for(int x = 6; x <= 11; x++){
     matrix.print(str[x]);
   }
+
+  // Update display
+  matrix.swapBuffers(false);
+}
+
+void printScroll(char str[], int size) {
+  
+  //textMin       = size;
+  matrix.setTextSize(2);   
+
+  byte i;
+
+  // Clear background
+  matrix.fillScreen(0);
+
+  // Draw big scrolly text on top
+  matrix.setTextColor(matrix.ColorHSV(hue, 255, 255, true));
+  matrix.setCursor(textX, 1);
+  matrix.print(str);
+
+  // Move text left (w/wrap), increase hue
+  if((--textX) < textMin) textX = matrix.width();
+  hue += 7;
+  if(hue >= 1536) hue -= 1536;
+
+  // Update display
+  matrix.swapBuffers(false);
+
+  delay(10);
 }
